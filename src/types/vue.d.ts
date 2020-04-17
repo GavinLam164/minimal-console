@@ -1,5 +1,13 @@
 import Vue from 'vue';
 
+
+declare module 'element-ui/types/notification' {
+  interface ElNotification {
+    closeAll(): void;
+  }
+}
+
+
 declare module 'vue/types/vue' {
   interface Vue {
     $myProperty: string;

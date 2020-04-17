@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
-import AppMain from '../layouts/app-main.vue';
+import AppMain from '../layouts/app-main/index.vue';
 
 Vue.use(VueRouter);
 
@@ -15,6 +15,22 @@ const routes: Array<RouteConfig> = [
         component: () => import(/* webpackChunkName: 'category' */'../views/category/index.vue'),
       },
     ],
+  },
+  {
+    path: '/product',
+    component: AppMain,
+    children: [
+      {
+        path: '',
+        name: 'Product',
+        component: () => import(/* webpackChunkName: 'product' */'../views/product/index.vue'),
+      },
+    ],
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: () => import(/* webpackChunkName: 'login' */'../views/login/index.vue'),
   },
 ];
 

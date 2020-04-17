@@ -1,10 +1,11 @@
 <template>
   <el-table :data="datas" v-bind="$attrs" v-on="$listeners">
-    <el-table-column v-for="(label, index) in labels" :key="index" v-bind="label">
-      <template v-if="label.slotName" slot-scope="scope">
-        <slot :name="label.slotName" v-bind="scope" />
-      </template>
-    </el-table-column>
+    <template v-for="(label, index) in labels" v-bind="label">
+      <el-table-column v-if="label.slotName" v-bind="label" :key="index">
+        <slot slot-scope="scope" :name="label.slotName" v-bind="scope" />
+      </el-table-column>
+      <el-table-column v-else v-bind="label" :key="index" />
+    </template>
   </el-table>
 </template>
 <script>
