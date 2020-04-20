@@ -1,63 +1,54 @@
 <template>
-  <el-dialog width="600px" :title="$t('product.新增商品')" :visible.sync="visible">
-    <el-form :model="form" ref="form" :rules="rules" inline label-width="100px">
-      <el-form-item :label="$t('product.商品类目')" prop="categoryId" required>
-        <m-select-category v-model="form.categoryId" />
-      </el-form-item>
-      <el-form-item :label="$t('product.商品名称')" prop="spuName" required>
-        <el-input v-model="form.spuName" />
-      </el-form-item>
-      <el-form-item :label="$t('product.商品描述')" prop="spuDesc">
-        <el-input v-model="form.spuDesc" type="textarea" />
-      </el-form-item>
-      <el-form-item :label="$t('product.商品价格')" prop="spuPrice" required>
-        <el-input v-model="form.spuPrice" />
-      </el-form-item>
-      <div>
-        <el-form-item label="Banner" prop="bannerImageList" required>
-          <m-upload v-model="form.bannerImageList" />
-        </el-form-item>
-      </div>
-      <div>
-        <el-form-item :label="$t('product.详情图')" prop="detailImageList" required>
-          <m-upload v-model="form.detailImageList" />
-        </el-form-item>
-      </div>
-      <el-row type="flex" justify="end">
-        <el-button type="primary" @click="submit">{{$t('global.提交')}}</el-button>
-      </el-row>
-    </el-form>
+  <el-dialog width="800px" :title="$t('product.新增商品')" :visible.sync="visible" append-to-body>
+    <spu
+      ref="spu"
+      :is-add="isAdd"
+      :is-detail="isDetail"
+      :is-edit="isEdit"
+      :spu-id="spuId"
+      :visible="visible"
+    />
+    <spec-group-list :spu-id="spuId" />
+    <sku :spu-id="spuId" />
   </el-dialog>
 </template>
 
 <script>
+import Spu from './components/spu.vue';
+import SpecGroupList from './components/spec-group-list.vue';
+import Sku from './components/sku.vue';
 
 export default {
+  components: {
+    Spu,
+    SpecGroupList,
+    Sku,
+  },
   data() {
     return {
+      spuId: '',
       visible: false,
-      form: {},
+      isDetail: false,
     };
   },
   computed: {
-    rules() {
-      return {
-      };
+    isAdd() {
+      return !this.isEdit && !this.isDetail;
+    },
+    isEdit() {
+      return this.spuId;
     },
   },
   methods: {
-    open() {
+    async open(spuId = '', isDetail = false) {
+      this.spuId = spuId;
+      this.isDetail = isDetail;
       this.visible = true;
     },
     close() {
+      this.spuId = '';
+      this.isDetail = false;
       this.visible = false;
-    },
-    async submit() {
-      await this.$refs.form.validate();
-      this.$refs.form.resetFields();
-      this.$emit('submit');
-      this.$message.success(this.$t('global.新增成功'));
-      this.close();
     },
   },
 };
