@@ -88,10 +88,13 @@ export default {
         bannerImageList,
         detailImageList,
       });
-      this.resetFields();
-      this.$emit('submit');
-      this.$message.success(this.$t('global.新增成功'));
-      this.close();
+      if (this.isAdd) {
+        this.resetFields();
+        this.$emit('submit');
+        this.$message.success(this.$t('global.新增成功'));
+      } else {
+        this.$message.success(this.$t('global.修改成功'));
+      }
     },
     resetFields() {
       this.$refs.form.resetFields();

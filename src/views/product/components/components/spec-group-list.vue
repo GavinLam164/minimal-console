@@ -4,7 +4,7 @@
     <spec-group-item
       v-for="({specValueList, specGroupId},index) in specGroupList"
       :key="index"
-      :group-index="index"
+      :spec-group-index="index"
       :spu-id="spuId"
       :spec-value-list="specValueList"
       :spec-group-id="specGroupId"
@@ -36,6 +36,7 @@ export default {
       if (!this.spuId) return;
       const { data } = await specGroupListSelect(this.spuId);
       this.specGroupList = data;
+      this.$emit('init-spec-group-list');
     },
     async initSpecGroupOptions() {
       const { data } = await specGroupList();

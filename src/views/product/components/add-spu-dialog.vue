@@ -8,8 +8,10 @@
       :spu-id="spuId"
       :visible="visible"
     />
-    <spec-group-list :spu-id="spuId" />
-    <sku :spu-id="spuId" />
+    <template v-if="spuId">
+      <spec-group-list :spu-id="spuId" @init-spec-group-list="updateSkuList" />
+      <sku ref="sku" :spu-id="spuId" />
+    </template>
   </el-dialog>
 </template>
 
@@ -49,6 +51,9 @@ export default {
       this.spuId = '';
       this.isDetail = false;
       this.visible = false;
+    },
+    updateSkuList() {
+      this.$refs.sku.initSkuList();
     },
   },
 };

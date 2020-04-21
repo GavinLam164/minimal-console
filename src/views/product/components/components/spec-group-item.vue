@@ -14,6 +14,7 @@
       <el-tag
         v-for="(specValue, index) in specValueList"
         :key="index"
+        @close="close(specValue)"
         closable
       >{{specValue.specValueName}}</el-tag>
       <el-form-item class="spec-value-input">
@@ -38,7 +39,7 @@
 }
 </style>
 <script>
-import { specValueAdd } from '@/api/product';
+import { specValueAdd, specValueDel } from '@/api/product';
 
 export default {
   props: ['spuId', 'specValueList', 'specGroupId', 'specGroupOptions', 'specGroupIndex'],
@@ -67,6 +68,10 @@ export default {
         specGroupIndex: this.specGroupIndex,
       });
       this.form.specValueName = '';
+      this.$emit('submit');
+    },
+    async close(specValue) {
+      await specValueDel(this.spuId, specValue.specValueId);
       this.$emit('submit');
     },
   },

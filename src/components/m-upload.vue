@@ -1,5 +1,5 @@
 <template>
-  <div class="m-upload">
+  <div :class="`m-upload ${componentClass}`">
     <el-upload
       action="/api/upload/uploadFile"
       list-type="picture-card"
@@ -8,7 +8,7 @@
       :on-remove="handleRemove"
       :on-success="handleSuccess"
       :file-list="fileList"
-      v-bind="$attrs"
+      :limit="limit"
     >
       <i class="el-icon-plus"></i>
     </el-upload>
@@ -24,6 +24,10 @@
     height: 80px;
     line-height: 90px;
   }
+
+  .none {
+    display: none;
+  }
 }
 </style>
 <script>
@@ -32,6 +36,10 @@ export default {
   props: {
     value: {
       type: Array,
+    },
+    limit: {
+      type: Number,
+      default: 5,
     },
   },
   data() {
@@ -45,10 +53,28 @@ export default {
       fileList: [],
     };
   },
+  computed: {
+    componentClass() {
+      // eslint-disable-next-line no-underscore-dangle
+      return `m-upload-${this._uid}`;
+    },
+  },
+  updated() {
+    this.toggleAddIcon();
+  },
   methods: {
+    toggleAddIcon() {
+      const addIcon = document.querySelector(`.${this.componentClass} div.el-upload--picture-card`);
+      if (!addIcon) return;
+      if (this.value.length >= this.limit) {
+        addIcon.classList.add('none');
+      } else {
+        addIcon.classList.remove('none');
+      }
+    },
     handleRemove(file, fileList) {
       this.fileList = fileList;
-      this.$emit('input', this.value.filter((u) => u.url !== file.url));
+      this.$emit('input', this.value.filter((u) => u !== file.url));
     },
     handleSuccess(response, file, fileList) {
       // eslint-disable-next-line no-param-reassign

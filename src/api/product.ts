@@ -48,7 +48,6 @@ export const productSpuQuery = (spuId: number) => get('/product/spu/query', {
   spuId,
 });
 
-
 export const specGroupList = (spuId: number) => get('/spec/group/list', {
   spuId,
 });
@@ -56,6 +55,7 @@ export const specGroupList = (spuId: number) => get('/spec/group/list', {
 interface SpecValue {
   specValueId?: number;
   specGroupId: number;
+  specGroupIndex: number;
   specValueName: string;
   specValueIndex: number;
   spuId: number;
@@ -76,9 +76,21 @@ export const specGroupListSelect = (spuId: number) => get('/spec/group/list/sele
   spuId,
 });
 
-
 export const productSkuList = (spuId: number) => get('/product/sku/list', {
   spuId,
 });
+
+export const productSkuUpdate = (params: any) => post('/product/sku/update', params, {
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+export const specValueDel = (spuId: number, specValueId: number) => post('/spec/value/del', {
+  spuId,
+  specValueId,
+});
+
+export const productSkuUpdateState = (params: any) => post('/product/sku/updateState', params);
 
 export default {};

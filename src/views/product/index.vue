@@ -40,7 +40,7 @@
       <m-img slot="spuImage" slot-scope="{row}" :src="row.spuImage.spuImagePath" />
       <template slot="operate" slot-scope="{row}">
         <el-button type="text" @click="openEditDialog(row)">{{$t('global.编辑')}}</el-button>
-        <el-button type="text" @click="openDetailDialog(row)">{{$t('global.详情')}}</el-button>
+        <!-- <el-button type="text" @click="openDetailDialog(row)">{{$t('global.详情')}}</el-button> -->
         <el-button
           type="text"
           v-if="row.saleState === 0"
@@ -53,6 +53,14 @@
         >{{$t('product.下架')}}</el-button>
       </template>
     </m-table>
+    <el-row type="flex" justify="end">
+      <el-pagination
+        v-bind="pageParmas"
+        layout="prev, pager, next"
+        @size-change="sizeChange"
+        @current-change="currentChange"
+      ></el-pagination>
+    </el-row>
   </div>
 </template>
 <style lang="scss">
@@ -93,8 +101,8 @@ export default {
       spuList: [],
       selectionSpuList: [],
       pageParmas: {
-        curPage: 1,
-        pageSize: 10,
+        currentPage: 1,
+        pageSize: 2,
       },
       form: {
         saleStates: [],
@@ -155,12 +163,27 @@ export default {
     this.initSpuList();
   },
   methods: {
+    async sizeChange(pageSize) {
+      this.pageParmas.pageSize = pageSize;
+      this.initSpuList();
+    },
+    async currentChange(currentPage) {
+      this.pageParmas.currentPage = currentPage;
+      this.initSpuList();
+    },
     async initSpuList() {
       const { data } = await productSpuList({
         ...this.pageParmas,
         ...this.form,
       });
-      const { list } = data;
+      const {
+        list, pageSize, total, currentPage,
+      } = data;
+      this.pageParmas = {
+        pageSize,
+        total,
+        currentPage,
+      };
       this.spuList = list;
     },
     getStateText(saleState) {
