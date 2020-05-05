@@ -6,13 +6,19 @@
     <div class="category-title">
       <el-row type="flex" justify="space-between">
         <el-col>
-          <el-button type="primary" size="mini" @click="openAddCategoryDialog">{{$t('global.新增')}}</el-button>
+          <el-button type="primary" size="mini" @click="openAddCategoryDialog">{{
+            $t("global.新增")
+          }}</el-button>
         </el-col>
         <el-col>
-          <el-button type="success" size="mini" @click="enable">{{$t('category.启用')}}</el-button>
+          <el-button type="success" size="mini" @click="enable">{{
+            $t("category.启用")
+          }}</el-button>
         </el-col>
         <el-col>
-          <el-button type="warning" size="mini" @click="disable">{{$t('category.禁用')}}</el-button>
+          <el-button type="warning" size="mini" @click="disable">{{
+            $t("category.禁用")
+          }}</el-button>
         </el-col>
         <!-- <el-col>
           <el-button type="danger" size="mini">{{$t('category.删除')}}</el-button>
