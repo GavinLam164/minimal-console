@@ -1,6 +1,10 @@
 
 import { get, post } from './index';
 
+export const categoryBackFind = (categoryId: number) => get('/category/back/find', {
+  categoryId,
+});
+
 export const categoryBackFindByParentId = (categoryId?: number) => get('/category/back/findByParentId', {
   categoryId,
 });

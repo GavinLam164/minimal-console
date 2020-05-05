@@ -30,7 +30,7 @@
         </el-col>
       </el-row>
     </el-form>
-    <add-spu-dialog ref="addSpuDialog" />
+    <add-spu-dialog ref="addSpuDialog" @submit="initSpuList" />
     <div>
       <el-button type="primary" size="mini" @click="openAddDialog">{{$t('global.新增')}}</el-button>
       <el-button type="success" size="mini" @click="puawaySelection">{{$t('product.上架')}}</el-button>
@@ -39,7 +39,8 @@
     <m-table :labels="labels" :datas="spuList" border @selection-change="selectionChange">
       <m-img slot="spuImage" slot-scope="{row}" :src="row.spuImage.spuImagePath" />
       <template slot="operate" slot-scope="{row}">
-        <el-button type="text">{{$t('global.详情')}}</el-button>
+        <el-button type="text" @click="openEditDialog(row)">{{$t('global.编辑')}}</el-button>
+        <!-- <el-button type="text" @click="openDetailDialog(row)">{{$t('global.详情')}}</el-button> -->
         <el-button
           type="text"
           v-if="row.saleState === 0"
@@ -52,6 +53,14 @@
         >{{$t('product.下架')}}</el-button>
       </template>
     </m-table>
+    <el-row type="flex" justify="end">
+      <el-pagination
+        v-bind="pageParmas"
+        layout="prev, pager, next"
+        @size-change="sizeChange"
+        @current-change="currentChange"
+      ></el-pagination>
+    </el-row>
   </div>
 </template>
 <style lang="scss">
@@ -89,14 +98,11 @@ export default {
   },
   data() {
     return {
-      headers: {
-        token: '345038b05aa4dafa4329b9577d5f7e38',
-      },
       spuList: [],
       selectionSpuList: [],
       pageParmas: {
-        curPage: 1,
-        pageSize: 10,
+        currentPage: 1,
+        pageSize: 2,
       },
       form: {
         saleStates: [],
@@ -113,11 +119,13 @@ export default {
         {
           label: 'spuId',
           prop: 'spuId',
+          width: 70,
         },
         {
           label: this.$t('product.图片'),
           prop: 'spuImage',
           slotName: 'spuImage',
+          width: 70,
         },
         {
           label: this.$t('product.商品名称'),
@@ -133,7 +141,7 @@ export default {
           formatter: ({ saleState }) => this.$t(this.getStateText(saleState)),
         },
         {
-          label: '操作',
+          label: this.$t('global.操作'),
           slotName: 'operate',
         },
       ];
@@ -155,12 +163,27 @@ export default {
     this.initSpuList();
   },
   methods: {
+    async sizeChange(pageSize) {
+      this.pageParmas.pageSize = pageSize;
+      this.initSpuList();
+    },
+    async currentChange(currentPage) {
+      this.pageParmas.currentPage = currentPage;
+      this.initSpuList();
+    },
     async initSpuList() {
       const { data } = await productSpuList({
         ...this.pageParmas,
         ...this.form,
       });
-      const { list } = data;
+      const {
+        list, pageSize, total, currentPage,
+      } = data;
+      this.pageParmas = {
+        pageSize,
+        total,
+        currentPage,
+      };
       this.spuList = list;
     },
     getStateText(saleState) {
@@ -194,7 +217,7 @@ export default {
     },
     async soldOutSelection() {
       await this.updateState(this.selectionSpuList, 0);
-      this.puawaySuccess();
+      this.soldOutSucess();
     },
     async puawaySingle(spu) {
       await this.updateState([spu], 1);
@@ -206,6 +229,12 @@ export default {
     },
     openAddDialog() {
       this.$refs.addSpuDialog.open();
+    },
+    openDetailDialog({ spuId }) {
+      this.$refs.addSpuDialog.open(spuId, true);
+    },
+    openEditDialog({ spuId }) {
+      this.$refs.addSpuDialog.open(spuId, false);
     },
   },
 };

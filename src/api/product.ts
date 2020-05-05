@@ -1,4 +1,4 @@
-import { post } from './index';
+import { post, get } from './index';
 
 interface SpuListReq {
   spuId?: number;
@@ -43,5 +43,54 @@ export const productSpuAdd = (params: ProductSpu) => post('/product/spu/add', pa
     'Content-Type': 'application/json',
   },
 });
+
+export const productSpuQuery = (spuId: number) => get('/product/spu/query', {
+  spuId,
+});
+
+export const specGroupList = (spuId: number) => get('/spec/group/list', {
+  spuId,
+});
+
+interface SpecValue {
+  specValueId?: number;
+  specGroupId: number;
+  specGroupIndex: number;
+  specValueName: string;
+  specValueIndex: number;
+  spuId: number;
+}
+
+export const specValueAdd = (params: SpecValue) => post('/spec/value/add', params, {
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+export const specValueList = (spuId: number, specGroupId: number) => get('/spec/value/list', {
+  spuId,
+  specGroupId,
+});
+
+export const specGroupListSelect = (spuId: number) => get('/spec/group/list/select', {
+  spuId,
+});
+
+export const productSkuList = (spuId: number) => get('/product/sku/list', {
+  spuId,
+});
+
+export const productSkuUpdate = (params: any) => post('/product/sku/update', params, {
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+export const specValueDel = (spuId: number, specValueId: number) => post('/spec/value/del', {
+  spuId,
+  specValueId,
+});
+
+export const productSkuUpdateState = (params: any) => post('/product/sku/updateState', params);
 
 export default {};
