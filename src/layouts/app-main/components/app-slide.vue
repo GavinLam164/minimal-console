@@ -15,6 +15,10 @@
           <i class="el-icon-menu"></i>
           <span slot="title">{{$t('product.商品管理')}}</span>
         </el-menu-item>
+        <el-menu-item index="/upload">
+          <i class="el-icon-menu"></i>
+          <span slot="title">{{$t('product.上传图片')}}</span>
+        </el-menu-item>
       </el-menu>
     </el-scrollbar>
   </el-aside>

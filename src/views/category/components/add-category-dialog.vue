@@ -4,6 +4,9 @@
       <el-form-item :label="$t('category.类目名称')" prop="categoryName">
         <el-input v-model="form.categoryName" />
       </el-form-item>
+      <el-form-item :label="$t('category.类目图片')" prop="categoryName">
+        <m-upload v-model="form.image" ref="img" />
+      </el-form-item>
       <el-row type="flex" justify="end">
         <el-button type="primary" @click="submit">{{$t('global.提交')}}</el-button>
       </el-row>
@@ -18,7 +21,9 @@ export default {
     return {
       visible: false,
       parentId: null,
-      form: {},
+      form: {
+        image: [],
+      },
     };
   },
   computed: {
@@ -28,6 +33,12 @@ export default {
           {
             required: true,
             message: this.$t('category.请输入类目名称'),
+          },
+        ],
+        image: [
+          {
+            required: true,
+            message: '请添加商品图片',
           },
         ],
       };
@@ -44,13 +55,15 @@ export default {
     },
     async submit() {
       await this.$refs.form.validate();
-      const { categoryName } = this.form;
+      const { categoryName, image } = this.form;
       const { parentId } = this;
       await categoryBackAdd({
         categoryName,
         parentId,
+        image: image[0],
       });
       this.$refs.form.resetFields();
+      this.$refs.img.setFileList([]);
       this.$emit('submit');
       this.$message.success(this.$t('global.新增成功'));
       this.close();

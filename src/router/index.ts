@@ -28,6 +28,17 @@ const routes: Array<RouteConfig> = [
     ],
   },
   {
+    path: '/upload',
+    component: AppMain,
+    children: [
+      {
+        path: '',
+        name: 'Upload',
+        component: () => import(/* webpackChunkName: 'upload' */'../views/upload/index.vue'),
+      },
+    ],
+  },
+  {
     path: '/login',
     name: 'Login',
     component: () => import(/* webpackChunkName: 'login' */'../views/login/index.vue'),
